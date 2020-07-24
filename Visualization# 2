@@ -1,0 +1,15 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+missing_values=["n/a","na","--","s"]
+df= pd.read_csv('https://raw.githubusercontent.com/CunyLaguardiaDataAnalytics/datasets/master/2014-15_To_2016-17_School-_Level_NYC_Regents_Report_For_All_Variables.csv', na_values=missing_values)
+JHS=df[(df['School Name']!='J.H.S. 078 Roy H. Mann') & (df['Regents Exam']=='Common Core Algebra') & (df['School Level']=='Junior High-Intermediate-Middle')]
+JHS.drop_duplicates(keep='first',inplace=True)
+JHS[['School Name', 'Regents Exam', 'Mean Score', 'Year']]
+JHS.groupby(['Year', 'School Name', 'Regents Exam'])['Mean Score'].mean().sort_values(ascending= False).head(10)
+ROY78=df[(df['School Name']=='J.H.S. 078 Roy H. Mann') & (df['Regents Exam']!='Common Core English')]
+ROY78.drop_duplicates(keep='first',inplace=True)
+ROY78.groupby(['Year'])['Total Tested'].sum()
+sns.catplot(x='Regents Exam', y='Mean Score', hue= 'Year', data=ROY78, height=6, kind="bar", palette="muted" )
