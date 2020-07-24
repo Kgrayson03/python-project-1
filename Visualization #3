@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+missing_values=["n/a","na","--","s"]
+df= pd.read_csv('https://raw.githubusercontent.com/CunyLaguardiaDataAnalytics/datasets/master/2014-15_To_2016-17_School-_Level_NYC_Regents_Report_For_All_Variables.csv', na_values=missing_values)
+ROY78=df[(df['School Name']=='J.H.S. 078 Roy H. Mann') & (df['Regents Exam']=='Common Core Algebra')]
+ROY78.drop_duplicates(keep='first',inplace=True) 
+ROYMANN=ROY78[['School Name', 'Regents Exam', 'Mean Score', 'Percent Scoring 65 or Above', 'Year']]
+ROY=ROYMANN.groupby(['Year'])['Mean Score'].mean()
+EAST=df[(df['School Name']=='East Side Middle School') & (df['Regents Exam']=='Common Core Algebra') & (df['School Level']=='Junior High-Intermediate-Middle')]
+EAST.drop_duplicates(keep='first',inplace=True) 
+EASTJHS=EAST[['School Name', 'Regents Exam', 'Mean Score', 'Percent Scoring 65 or Above', 'Year']]
+AHS=EASTJHS.groupby(['Year'])['Mean Score'].mean()
+left=ROY
+right=AHS
+comp=pd.merge(left, right, on='Year')
+comp=comp.rename(columns={'Mean Score_x':'Roy H Mann', 'Mean Score_y': "East Side Middle School"})
+comp.plot.box()
+plt.show
+plt.title('East Side Middle vs Roy H. Mann')
+plt.ylabel('Average Common Core Algebra scores')
+plt.xlabel('School Comparison')
