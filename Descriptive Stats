@@ -18,9 +18,23 @@ import seaborn as sns
 %matplotlib inline
 missing_values=["n/a","na","--","s"]
 df= pd.read_csv('https://raw.githubusercontent.com/CunyLaguardiaDataAnalytics/datasets/master/2014-15_To_2016-17_School-_Level_NYC_Regents_Report_For_All_Variables.csv', na_values=missing_values)
-JHS=df[(df['School Name']!='J.H.S. 078 Roy H. Mann')  & (df['Year']==2017) & (df['Regents Exam']=='Common Core Algebra') & (df['School Level']=='Junior High-Intermediate-Middle')]
+JHS=df[(df['Year']==2017) & (df['Regents Exam']=='Common Core Algebra') & (df['School Level']=='Junior High-Intermediate-Middle')]
 JHS.drop_duplicates(keep='first',inplace=True)
 JHS
 JHS[['School Name', 'Regents Exam', 'Mean Score', 'Total Tested']]
 JHS.groupby(['School Name','Mean Score' ,'Percent Scoring 80 or Above','Regents Exam'])['Total Tested'].mean().sort_values(ascending= False).head(10)
 #This list displays the scores of schools who had most students tested in 2017 for Common Core Algebra.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+missing_values=["n/a","na","--","s"]
+df= pd.read_csv('https://raw.githubusercontent.com/CunyLaguardiaDataAnalytics/datasets/master/2014-15_To_2016-17_School-_Level_NYC_Regents_Report_For_All_Variables.csv', na_values=missing_values)
+JHS=df[(df['Year']==2017) & (df['Regents Exam']=='Common Core Algebra') & (df['School Level']=='Junior High-Intermediate-Middle')]
+JHS.drop_duplicates(keep='first',inplace=True)
+JHS
+JHS[['School Name', 'Regents Exam', 'Mean Score', 'Total Tested']]
+JHS.groupby(['School Name','Regents Exam']).agg({'Percent Scoring 80 or Above':'mean', 'Total Tested': 'sum'}).sort_values(by = ['Total Tested'] ,ascending=False).head(30)
+#In order to determine a method of improving scores of students in schools with large amounts of total tested, i thought it would be good to display schools with high number of tested as well as th percentage of the students who scored over 80. If we use this template we can isolate the schools who have success with large amounts of stufents and model their behaviors. 
